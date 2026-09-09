@@ -23,7 +23,7 @@ each security). Start here if you're opening this folder for the first time.
    - The final `ipytest.run('-vv')` cell actually executes all tests and prints a pass/fail result for each.
 3. You should see `28 passed` at the bottom with no failures. If anything fails, it means the reference implementation was changed without updating the tests (or vice versa) . Kindly check `ASSUMPTIONS.md` first, since most expected values trace back to an assumption listed there.
 
-No API keys, external services, or local installs are needed — everything the notebook needs, it installs or writes for itself in the first few cells.
+No API keys, external services, or local installs are needed , everything the notebook needs, it installs or writes for itself in the first few cells.
 
 ## How the three test documents relate
 
