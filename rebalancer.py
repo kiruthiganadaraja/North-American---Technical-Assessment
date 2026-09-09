@@ -24,40 +24,7 @@ For each security in an account:
              "SELL" if shares_rounded < 0
              "HOLD" if shares_rounded == 0
 
-ASSUMPTIONS DOCUMENTED FOR TESTING (confirm with the business/product owner
-before treating these as final — they are exactly the kind of ambiguity a
-tester should flag rather than silently assume):
 
-1. Fractional shares are NOT tradable. Every result is rounded to a whole
-   share using standard round-half-up on the absolute value, then the sign
-   (buy vs. sell) is re-applied. E.g. 66.67 -> 67, -45.45 -> -45... wait,
-   45.45 rounds to 45 (0.45 rounds down), while 66.67 rounds to 67
-   (0.67 rounds up) — see the rounding helper below for the exact rule.
-2. total_assets must be strictly positive. Zero or negative total assets is
-   treated as invalid input (raises ValueError) rather than silently
-   producing 0/0 or infinite share counts.
-3. unit_price must be strictly positive for the same reason (avoids a
-   ZeroDivisionError / negative-share nonsense from a bad price feed).
-4. target_pct and current_pct must be >= 0. Negative percentages are
-   rejected as bad data.
-5. The engine does NOT require sum(target_pct) == 100 or
-   sum(current_pct) == 100 across the account — it computes each security
-   independently, exactly as the spreadsheet does. A separate validation
-   helper (validate_allocations) is provided so a caller/tester can check
-   that invariant explicitly and decide what to do about it.
-6. No minimum trade size / no cash-sufficiency check is enforced. A real
-   trading system would likely also verify total buys can be funded by
-   total sells (or available cash) before submitting orders — this
-   reference implementation intentionally leaves that out so tests can
-   demonstrate it's a gap (see TC-11 / TC-15 in the manual test cases).
-7. VESTING (see TC-25): target_pct/current_pct are applied against the
-   VESTED (investable) portion of total_assets, not the full account
-   value. investable_base = total_assets * vested_pct / 100. Passing the
-   default vested_pct=100.0 reproduces every prior calculation exactly
-   (investable_base == total_assets), so this is backward compatible with
-   TC-01 through TC-16/19/20. This is a design DECISION made to make
-   TC-25 automatable, not a confirmed product requirement — flag it for
-   business sign-off before relying on it.
 """
 
 from dataclasses import dataclass, asdict
@@ -177,11 +144,3 @@ def calculate_single_line(
         vested_pct=vested_pct,
     )
     return result[0].shares_rounded
-
-# NOTE: an earlier revision of this file included handle_rebalance_request(),
-# a request/response-shaped adapter used to automate the API-contract test
-# cases (TC-21-24). It was removed by design decision: this application has
-# no live, deployed API, and testing a hand-built adapter proves the adapter
-# is internally consistent, not that a real API would behave correctly.
-# TC-21-24 are intentionally left as manual/Blocked test cases in
-# manual_test_cases.xlsx until a real endpoint exists to test against.
