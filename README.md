@@ -8,9 +8,9 @@ each security). Start here if you're opening this folder for the first time.
 
 | File | What it is |
 |---|---|
-| `North American Technical Assessment.ipynb` | The full automated test suite — `pytest` tests covering the calculation engine, input validation, and the vesting rule. Self-contained: run it in Google Colab (or any Jupyter environment) with no setup beyond the steps below. |
+| `North American Technical Assessment.ipynb` | The full automated test suite —> `pytest` tests covering the calculation engine, input validation, and the vesting rule. Self-contained: run it in Google Colab (or any Jupyter environment) with no setup beyond the steps below. |
 | `test_cases_for_northamerican_assessment.xlsx` | manual test cases (calculation logic, validation, vesting, UI, and API layers), including which ones are automated and a pointer to the exact automated test function for each. |
-| `ASSUMPTIONS.md` | The assumptions both suites are built on — rounding rules, validation rules, scope decisions (like vesting), and what's intentionally out of scope. Kindly read this if an expected result looks surprising. |
+| `ASSUMPTIONS.md` | The assumptions both suites are built on —> rounding rules, validation rules, scope decisions (like vesting), and what's intentionally out of scope. Kindly read this if an expected result looks surprising. |
 | `rebalancer.py` | Standalone copy of the reference implementation (the System Under Test) that the notebook also writes out and imports. Handy for reading the calculation logic on its own, outside the notebook. |
 
 ## How to run the automated test suite (`.ipynb`)
